@@ -9,6 +9,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+def _required_env(name: str) -> str:
+    value = os.getenv(name)
+    if value:
+        return value
+    raise RuntimeError(f"Missing required environment variable: {name}")
+
+
 def _normalize_database_url(raw_url: str) -> str:
     if raw_url.startswith("postgres://"):
         return raw_url.replace("postgres://", "postgresql+asyncpg://", 1)
@@ -19,15 +26,12 @@ def _normalize_database_url(raw_url: str) -> str:
 
 @dataclass(frozen=True)
 class Settings:
-    DATABASE_URL: str = os.getenv(
-        "DATABASE_URL",
-        "postgresql+asyncpg://postgres:postgres@localhost:5432/ics_backend",
-    )
-    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "change-this-development-secret")
+    DATABASE_URL: str = _required_env("DATABASE_URL")
+    JWT_SECRET_KEY: str = _required_env("JWT_SECRET_KEY")
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
-    ESP32_API_KEY: str = os.getenv("ESP32_API_KEY", "development-esp32-api-key")
-    DEFAULT_CARD_PASSWORD: str = os.getenv("DEFAULT_CARD_PASSWORD", "ChangeMe123!")
+    ESP32_API_KEY: str = _required_env("ESP32_API_KEY")
+    DEFAULT_CARD_PASSWORD: str = _required_env("DEFAULT_CARD_PASSWORD")
     CORS_ALLOW_ORIGINS: list[str] = None  # type: ignore[assignment]
 
     def __post_init__(self) -> None:
