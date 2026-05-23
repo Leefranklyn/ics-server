@@ -59,6 +59,12 @@ async def find_user_by_uid(db: AsyncSession, raw_uid: str) -> User | None:
 
 
 async def create_card_user(db: AsyncSession, payload: AdminCardCreate) -> UUID:
+    if not settings.DEFAULT_CARD_PASSWORD:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="DEFAULT_CARD_PASSWORD is not configured",
+        )
+
     assigned_rooms = [str(room_id) for room_id in payload.assigned_rooms]
     user = User(
         full_name=payload.full_name,

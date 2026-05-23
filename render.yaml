@@ -21,8 +21,6 @@ services:
         value: "30"
       - key: ESP32_API_KEY
         generateValue: true
-      - key: DEFAULT_CARD_PASSWORD
-        sync: false
       - key: SEED_DEMO_DATA
         value: "false"
       - key: CORS_ALLOW_ORIGINS

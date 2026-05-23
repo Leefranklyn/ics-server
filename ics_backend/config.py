@@ -31,7 +31,7 @@ class Settings:
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
     ESP32_API_KEY: str = _required_env("ESP32_API_KEY")
-    DEFAULT_CARD_PASSWORD: str = _required_env("DEFAULT_CARD_PASSWORD")
+    DEFAULT_CARD_PASSWORD: str | None = os.getenv("DEFAULT_CARD_PASSWORD")
     CORS_ALLOW_ORIGINS: list[str] = None  # type: ignore[assignment]
 
     def __post_init__(self) -> None:
