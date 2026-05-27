@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 from datetime import datetime, timedelta, timezone
 from uuid import UUID
 
@@ -21,6 +22,11 @@ pwd_context = CryptContext(schemes=["bcrypt"], bcrypt__rounds=12, deprecated="au
 
 def hash_secret(value: str) -> str:
     return pwd_context.hash(value)
+
+
+def sha256_uid(raw_uid: str) -> str:
+    """Compute SHA-256 hex digest of a raw card UID — matches ESP32 mbedtls implementation."""
+    return hashlib.sha256(raw_uid.encode()).hexdigest()
 
 
 def verify_secret(plain_value: str, hashed_value: str) -> bool:
@@ -49,13 +55,11 @@ async def authenticate_user(db: AsyncSession, email: str, password: str) -> User
 
 
 async def find_user_by_uid(db: AsyncSession, raw_uid: str) -> User | None:
+    hashed = sha256_uid(raw_uid)
     result = await db.execute(
-        select(User).where(User.card_status == "active", User.card_uid_hash.is_not(None))
+        select(User).where(User.card_status == "active", User.card_uid_sha256 == hashed)
     )
-    for user in result.scalars():
-        if user.card_uid_hash and verify_secret(raw_uid, user.card_uid_hash):
-            return user
-    return None
+    return result.scalar_one_or_none()
 
 
 async def create_card_user(db: AsyncSession, payload: AdminCardCreate) -> UUID:
@@ -73,6 +77,7 @@ async def create_card_user(db: AsyncSession, payload: AdminCardCreate) -> UUID:
         password_hash=hash_secret(settings.DEFAULT_CARD_PASSWORD),
         role=payload.role,
         card_uid_hash=hash_secret(payload.raw_card_uid),
+        card_uid_sha256=sha256_uid(payload.raw_card_uid),
         card_status="active",
         department=payload.department,
         level=payload.level,
@@ -106,22 +111,17 @@ async def list_users(db: AsyncSession, page: int, limit: int) -> tuple[int, list
 
 async def active_esp_users(db: AsyncSession) -> list[dict[str, object]]:
     result = await db.execute(
-        select(User).where(User.card_status == "active", User.card_uid_hash.is_not(None)).order_by(User.full_name)
+        select(User).where(User.card_status == "active", User.card_uid_sha256.is_not(None)).order_by(User.full_name)
     )
     users = list(result.scalars().all())
     rows: list[dict[str, object]] = []
     for user in users:
-        enrolled_rooms: list[str] = []
-        if user.role == "staff":
-            enrolled_rooms = [str(room_id) for room_id in (user.assigned_rooms or [])]
-        elif user.role == "student":
-            enrolled_rooms = await _student_enrolled_rooms(db, user.user_id)
         rows.append(
             {
-                "card_uid_hash": user.card_uid_hash,
+                "uid_fast": user.card_uid_sha256,
                 "user_id": user.user_id,
                 "role": user.role,
-                "enrolled_rooms": enrolled_rooms,
+                "name": user.full_name,
             }
         )
     return rows

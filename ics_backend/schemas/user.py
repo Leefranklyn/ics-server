@@ -50,3 +50,18 @@ class UserPage(BaseModel):
     limit: int
     total: int
     items: list[UserPublic]
+
+
+class RegistrationStartRequest(BaseModel):
+    full_name: str = Field(min_length=1, max_length=255)
+    email: str = Field(min_length=3, max_length=255)
+    role: UserRole
+    matric_number: str | None = Field(default=None, max_length=50)
+    department: str | None = Field(default=None, max_length=100)
+    level: int | None = None
+    assigned_rooms: list[UUID] = Field(default_factory=list)
+
+
+class RegistrationStartResponse(BaseModel):
+    session_id: str
+    status: str = "ok"

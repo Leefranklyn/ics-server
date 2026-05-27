@@ -6,7 +6,7 @@ from sqlalchemy import select, text
 
 from ics_backend.database import AsyncSessionLocal, Base, engine
 from ics_backend.models import Course, Enrollment, Room, User
-from ics_backend.services.card import hash_secret
+from ics_backend.services.card import hash_secret, sha256_uid
 
 
 RAW_CARD_UIDS = {
@@ -205,6 +205,7 @@ async def get_or_create_user(
         password_hash=hash_secret(password),
         role=role,
         card_uid_hash=hash_secret(raw_card_uid) if raw_card_uid else None,
+        card_uid_sha256=sha256_uid(raw_card_uid) if raw_card_uid else None,
         card_status="active",
         department=department,
         level=level,

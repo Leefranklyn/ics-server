@@ -22,23 +22,55 @@ from ics_backend.services.card import find_user_by_uid
 from ics_backend.services.schedule import get_active_course
 
 
-async def process_access_event(db: AsyncSession, payload: AccessEventCreate) -> AccessLog:
+async def process_access_event(db: AsyncSession, payload: AccessEventCreate) -> dict[str, str]:
     room = await _get_room(db, payload.room_id, lock_for_update=True)
     user = await find_user_by_uid(db, payload.card_uid)
     course = await get_active_course(db, payload.room_id, payload.timestamp)
 
+    if user is None:
+        # Unknown card — log as denied
+        access_log = AccessLog(
+            user_id=None,
+            room_id=payload.room_id,
+            course_id=course.course_id if course else None,
+            event_type="denied",
+            card_uid=payload.card_uid,
+            door_state="closed",
+            timestamp=payload.timestamp,
+        )
+        db.add(access_log)
+        await db.commit()
+        return {"decision": "denied", "message": "Unknown card"}
+
+    if user.card_status != "active":
+        access_log = AccessLog(
+            user_id=user.user_id,
+            room_id=payload.room_id,
+            course_id=course.course_id if course else None,
+            event_type="denied",
+            card_uid=payload.card_uid,
+            door_state="closed",
+            timestamp=payload.timestamp,
+        )
+        db.add(access_log)
+        await db.commit()
+        return {"decision": "denied", "message": "Card suspended"}
+
+    # Determine event type from reader
+    event_type = "entry" if payload.reader == "entry" else "exit"
+
     access_log = AccessLog(
-        user_id=user.user_id if user else None,
+        user_id=user.user_id,
         room_id=payload.room_id,
         course_id=course.course_id if course else None,
-        event_type=payload.event_type,
+        event_type=event_type,
         card_uid=payload.card_uid,
-        door_state=payload.door_state,
+        door_state="opened",
         timestamp=payload.timestamp,
     )
     db.add(access_log)
 
-    if payload.event_type == "entry":
+    if event_type == "entry":
         room.current_occupancy += 1
         if room.current_occupancy > room.capacity:
             await create_alert(
@@ -48,7 +80,7 @@ async def process_access_event(db: AsyncSession, payload: AccessEventCreate) -> 
                 "critical",
                 f"{room.room_name} is over capacity: {room.current_occupancy}/{room.capacity}",
             )
-    elif payload.event_type == "exit":
+    elif event_type == "exit":
         room.current_occupancy = max(room.current_occupancy - 1, 0)
 
     db.add(
@@ -61,7 +93,7 @@ async def process_access_event(db: AsyncSession, payload: AccessEventCreate) -> 
     )
     await db.commit()
     await db.refresh(access_log)
-    return access_log
+    return {"decision": "granted", "message": user.full_name}
 
 
 async def process_environment_event(db: AsyncSession, payload: EnvironmentEventCreate) -> None:

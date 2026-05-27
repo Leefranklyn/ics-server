@@ -27,6 +27,7 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[str] = mapped_column(String(20), nullable=False)
     card_uid_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    card_uid_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
     card_status: Mapped[str] = mapped_column(String(20), nullable=False, server_default=text("'active'"))
     department: Mapped[str | None] = mapped_column(String(100), nullable=True)
     level: Mapped[int | None] = mapped_column(Integer, nullable=True)

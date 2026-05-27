@@ -10,21 +10,34 @@ from pydantic import BaseModel, Field
 class AccessEventCreate(BaseModel):
     room_id: UUID
     card_uid: str = Field(min_length=1, max_length=50)
-    event_type: Literal["entry", "exit", "denied"]
-    door_state: Literal["opened", "closed"]
+    reader: Literal["entry", "exit"]
     timestamp: datetime
 
 
 class AccessEventResponse(BaseModel):
-    log_id: UUID
-    status: str = "ok"
+    decision: Literal["granted", "denied"]
+    message: str
 
 
 class EspUserCompact(BaseModel):
-    card_uid_hash: str
+    uid_fast: str
     user_id: UUID
     role: str
-    enrolled_rooms: list[UUID | str]
+    name: str
+
+
+class RegistrationStatusResponse(BaseModel):
+    active: bool
+    session_id: str | None = None
+
+
+class RegistrationUidCreate(BaseModel):
+    uid: str = Field(min_length=1, max_length=50)
+
+
+class RegistrationUidResponse(BaseModel):
+    status: str = "ok"
+    message: str = "Card registered"
 
 
 class RecentAccessEvent(BaseModel):
