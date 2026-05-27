@@ -28,6 +28,8 @@ class RegistrationSession:
     level: int | None
     assigned_rooms: list[str]
     created_at: float = field(default_factory=time.time)
+    received_uid: str | None = None
+    completed: bool = False
 
 
 # In-memory store for active registration sessions
@@ -89,7 +91,11 @@ def clear_registration_session() -> None:
 
 
 async def submit_registration_uid(db: AsyncSession, raw_uid: str) -> dict[str, str]:
-    """Called by ESP32 when a card is tapped during active registration."""
+    """Called by ESP32 when a card is tapped during active registration.
+    
+    Stores the UID in the session and marks it as completed.
+    Frontend can poll get_pending_session() to see the UID and completion status.
+    """
     global _active_session
 
     if _active_session is None:
@@ -145,7 +151,8 @@ async def submit_registration_uid(db: AsyncSession, raw_uid: str) -> dict[str, s
     db.add(user)
     await db.commit()
 
-    # Clear session after successful registration
-    _active_session = None
+    # Store UID and mark as completed - keep session active for frontend to display UID
+    _active_session.received_uid = raw_uid
+    _active_session.completed = True
 
     return {"status": "ok", "message": "Card registered"}

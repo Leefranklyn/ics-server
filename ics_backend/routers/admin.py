@@ -64,11 +64,25 @@ async def start_registration(payload: RegistrationStartRequest) -> RegistrationS
 
 @router.get("/registration/status")
 async def admin_registration_status() -> dict[str, object]:
-    """Poll the registration session status from the web portal."""
+    """Poll the registration session status from the web portal.
+    
+    Returns:
+    - active: Whether a registration session is active
+    - completed: Whether the card has been tapped and user created
+    - received_uid: The card UID that was tapped (only if completed=true)
+    - full_name: The user being registered (only if active=true)
+    - session_id: The registration session ID (only if active=true)
+    """
     session = get_pending_session()
     if session is None:
         return {"active": False, "completed": False}
-    return {"active": True, "session_id": session.session_id, "full_name": session.full_name}
+    return {
+        "active": True,
+        "completed": session.completed,
+        "session_id": session.session_id,
+        "full_name": session.full_name,
+        "received_uid": session.received_uid,
+    }
 
 
 @router.delete("/registration")
