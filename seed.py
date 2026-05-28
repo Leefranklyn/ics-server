@@ -76,6 +76,11 @@ async def main() -> None:
         )
         await db.flush()
 
+        # Ensure admin and staff have correct room assignments
+        admin.assigned_rooms = [str(csc_lab.room_id), str(physics_lab.room_id), str(lecture_hall.room_id)]
+        staff_ade.assigned_rooms = [str(csc_lab.room_id), str(lecture_hall.room_id)]
+        staff_okafor.assigned_rooms = [str(physics_lab.room_id)]
+
         csc_lab.assigned_staff = [str(admin.user_id), str(staff_ade.user_id)]
         physics_lab.assigned_staff = [str(admin.user_id), str(staff_okafor.user_id)]
         lecture_hall.assigned_staff = [str(admin.user_id), str(staff_ade.user_id)]
