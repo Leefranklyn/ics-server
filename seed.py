@@ -52,6 +52,7 @@ async def main() -> None:
             password="admin123",
             role="admin",
             department="ICT",
+            assigned_rooms=[str(csc_lab.room_id), str(physics_lab.room_id), str(lecture_hall.room_id)],
         )
         staff_ade = await get_or_create_user(
             db,
@@ -75,9 +76,9 @@ async def main() -> None:
         )
         await db.flush()
 
-        csc_lab.assigned_staff = [str(staff_ade.user_id)]
-        physics_lab.assigned_staff = [str(staff_okafor.user_id)]
-        lecture_hall.assigned_staff = [str(staff_ade.user_id)]
+        csc_lab.assigned_staff = [str(admin.user_id), str(staff_ade.user_id)]
+        physics_lab.assigned_staff = [str(admin.user_id), str(staff_okafor.user_id)]
+        lecture_hall.assigned_staff = [str(admin.user_id), str(staff_ade.user_id)]
 
         course_1 = await get_or_create_course(
             db,
