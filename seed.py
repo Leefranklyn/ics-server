@@ -40,6 +40,11 @@ async def main() -> None:
         lecture_hall = await get_or_create_room(db, "Lecture Hall A", 120)
         await db.flush()
 
+        print("Rooms created:")
+        print(f"- CSC Lab (capacity: 40)")
+        print(f"- Physics Lab (capacity: 35)")
+        print(f"- Lecture Hall A (capacity: 120)")
+
         admin = await get_or_create_user(
             db,
             full_name="ICS Administrator",
