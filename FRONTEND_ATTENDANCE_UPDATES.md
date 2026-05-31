@@ -56,6 +56,39 @@ Notes:
 - If a session is already active for the room, the backend returns `409`.
 - The selected course must belong to the selected room.
 
+## Get Courses For Room
+
+```http
+GET /api/admin/rooms/{room_id}/courses
+```
+
+Response:
+
+```json
+[
+  {
+    "course_id": "uuid-string",
+    "course_code": "CSC 214",
+    "course_name": "Data Structures",
+    "room_id": "room-uuid",
+    "lecturer_id": "lecturer-uuid",
+    "schedule": {
+      "day": "Monday",
+      "start_time": "09:00",
+      "duration_mins": 90
+    },
+    "semester": "Rain",
+    "academic_year": "2025/2026"
+  }
+]
+```
+
+Frontend use:
+
+- Fetch this after a room is selected.
+- Pass the returned array into `SessionManager` as `courses`.
+- Staff users can only fetch courses for rooms assigned to them.
+
 ## Get Active Session For Room
 
 ```http
