@@ -41,3 +41,5 @@ class User(Base):
     lectured_courses = relationship("Course", back_populates="lecturer")
     enrollments = relationship("Enrollment", back_populates="student")
     access_logs = relationship("AccessLog", back_populates="user")
+    opened_attendance_sessions = relationship("AttendanceSession", back_populates="opener")
+    attendance_records = relationship("AttendanceRecord", back_populates="user")

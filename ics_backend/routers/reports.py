@@ -10,7 +10,7 @@ from fastapi import APIRouter, Depends, Query
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ics_backend.dependencies import get_current_user, get_db
+from ics_backend.dependencies import get_db, require_role
 from ics_backend.models.user import User
 from ics_backend.services.attendance import get_attendance_report
 
@@ -25,15 +25,28 @@ async def attendance_report(
     date_to: datetime,
     student_id: UUID | None = None,
     course_id: UUID | None = None,
+    session_id: UUID | None = None,
     report_format: Literal["json", "csv"] = Query("json", alias="format"),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "admin")),
     db: AsyncSession = Depends(get_db),
 ) -> list[dict[str, object]] | StreamingResponse:
-    rows = await get_attendance_report(db, current_user, room_id, date_from, date_to, student_id, course_id)
+    rows = await get_attendance_report(db, current_user, room_id, date_from, date_to, student_id, course_id, session_id)
     if report_format == "csv":
         buffer = io.StringIO()
         writer = csv.writer(buffer)
-        writer.writerow(["timestamp", "full_name", "matric_number", "course_code", "event_type", "door_state"])
+        writer.writerow(
+            [
+                "timestamp",
+                "full_name",
+                "matric_number",
+                "course_code",
+                "session_id",
+                "session_name",
+                "session_started_at",
+                "event_type",
+                "marked_at",
+            ]
+        )
         for row in rows:
             writer.writerow(
                 [
@@ -41,8 +54,13 @@ async def attendance_report(
                     row["full_name"] or "",
                     row["matric_number"] or "",
                     row["course_code"] or "",
+                    row["session_id"],
+                    row["session_name"] or "",
+                    row["session_started_at"].isoformat()
+                    if isinstance(row["session_started_at"], datetime)
+                    else row["session_started_at"],
                     row["event_type"],
-                    row["door_state"],
+                    row["marked_at"].isoformat() if isinstance(row["marked_at"], datetime) else row["marked_at"],
                 ]
             )
         buffer.seek(0)

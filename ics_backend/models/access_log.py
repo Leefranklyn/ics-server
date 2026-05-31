@@ -13,7 +13,7 @@ from ics_backend.database import Base
 class AccessLog(Base):
     __tablename__ = "access_log"
     __table_args__ = (
-        CheckConstraint("event_type IN ('entry', 'exit', 'denied')", name="event_type_valid"),
+        CheckConstraint("event_type IN ('entry', 'exit', 'denied', 'attendance')", name="event_type_valid"),
         CheckConstraint("door_state IN ('opened', 'closed')", name="door_state_valid"),
         Index("ix_access_log_room_timestamp", "room_id", "timestamp"),
         Index("ix_access_log_user_timestamp", "user_id", "timestamp"),

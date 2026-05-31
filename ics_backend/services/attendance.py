@@ -1,21 +1,25 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from statistics import mean
 from uuid import UUID
 
 from fastapi import HTTPException, status
-from sqlalchemy import Select, and_, cast, outerjoin, select, update
+from sqlalchemy import Select, and_, cast, func, outerjoin, select, update
+from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.sqltypes import String
 
 from ics_backend.models.access_log import AccessLog
+from ics_backend.models.attendance import AttendanceRecord, AttendanceSession
 from ics_backend.models.course import Course
 from ics_backend.models.environment_log import EnvironmentLog
 from ics_backend.models.occupancy_log import OccupancyLog
 from ics_backend.models.room import Room
 from ics_backend.models.user import User
 from ics_backend.schemas.access import AccessEventCreate
+from ics_backend.schemas.attendance import AttendanceSessionStartRequest
 from ics_backend.schemas.environment import EnvironmentEventCreate
 from ics_backend.services.alerts import create_alert
 from ics_backend.services.card import find_user_by_uid
@@ -26,13 +30,15 @@ async def process_access_event(db: AsyncSession, payload: AccessEventCreate) -> 
     room = await _get_room(db, payload.room_id, lock_for_update=True)
     user = await find_user_by_uid(db, payload.card_uid)
     course = await get_active_course(db, payload.room_id, payload.timestamp)
+    active_session = await _get_active_attendance_session(db, payload.room_id)
+    access_course_id = active_session.course_id if active_session else course.course_id if course else None
 
     if user is None:
         # Unknown card — log as denied
         access_log = AccessLog(
             user_id=None,
             room_id=payload.room_id,
-            course_id=course.course_id if course else None,
+            course_id=access_course_id,
             event_type="denied",
             card_uid=payload.card_uid,
             door_state="closed",
@@ -46,7 +52,7 @@ async def process_access_event(db: AsyncSession, payload: AccessEventCreate) -> 
         access_log = AccessLog(
             user_id=user.user_id,
             room_id=payload.room_id,
-            course_id=course.course_id if course else None,
+            course_id=access_course_id,
             event_type="denied",
             card_uid=payload.card_uid,
             door_state="closed",
@@ -57,20 +63,36 @@ async def process_access_event(db: AsyncSession, payload: AccessEventCreate) -> 
         return {"decision": "denied", "message": "Card suspended"}
 
     # Determine event type from reader
-    event_type = "entry" if payload.reader == "entry" else "exit"
+    access_event_type = "attendance" if active_session else "entry" if payload.reader == "entry" else "exit"
 
     access_log = AccessLog(
         user_id=user.user_id,
         room_id=payload.room_id,
-        course_id=course.course_id if course else None,
-        event_type=event_type,
+        course_id=access_course_id,
+        event_type=access_event_type,
         card_uid=payload.card_uid,
         door_state="opened",
         timestamp=payload.timestamp,
     )
     db.add(access_log)
 
-    if event_type == "entry":
+    attendance_marked = False
+    if active_session:
+        result = await db.execute(
+            pg_insert(AttendanceRecord)
+            .values(
+                session_id=active_session.session_id,
+                user_id=user.user_id,
+                room_id=payload.room_id,
+                course_id=active_session.course_id,
+                marked_at=payload.timestamp,
+                marked_by_card_uid=payload.card_uid,
+            )
+            .on_conflict_do_nothing(index_elements=["session_id", "user_id"])
+        )
+        attendance_marked = result.rowcount == 1
+
+    if payload.reader == "entry":
         room.current_occupancy += 1
         if room.current_occupancy > room.capacity:
             await create_alert(
@@ -80,7 +102,7 @@ async def process_access_event(db: AsyncSession, payload: AccessEventCreate) -> 
                 "critical",
                 f"{room.room_name} is over capacity: {room.current_occupancy}/{room.capacity}",
             )
-    elif event_type == "exit":
+    elif payload.reader == "exit":
         room.current_occupancy = max(room.current_occupancy - 1, 0)
 
     db.add(
@@ -93,7 +115,99 @@ async def process_access_event(db: AsyncSession, payload: AccessEventCreate) -> 
     )
     await db.commit()
     await db.refresh(access_log)
-    return {"decision": "granted", "message": user.full_name}
+    if active_session:
+        message = "Access Granted - Attendance Marked" if attendance_marked else "Access Granted"
+    else:
+        message = user.full_name
+    return {"decision": "granted", "message": message}
+
+
+async def start_attendance_session(
+    db: AsyncSession,
+    current_user: User,
+    payload: AttendanceSessionStartRequest,
+) -> AttendanceSession:
+    await _get_room_for_reader(db, current_user, payload.room_id)
+
+    course_result = await db.execute(select(Course).where(Course.course_id == payload.course_id))
+    course = course_result.scalar_one_or_none()
+    if course is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
+    if course.room_id != payload.room_id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Course is not assigned to this room")
+
+    active_session = await _get_active_attendance_session(db, payload.room_id)
+    if active_session is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="An attendance session is already active for this room",
+        )
+
+    session = AttendanceSession(
+        room_id=payload.room_id,
+        course_id=payload.course_id,
+        opened_by=current_user.user_id,
+        session_name=payload.session_name,
+        started_at=datetime.now(timezone.utc),
+        status="active",
+    )
+    db.add(session)
+    try:
+        await db.commit()
+    except IntegrityError as exc:
+        await db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="An attendance session is already active for this room",
+        ) from exc
+    await db.refresh(session)
+    return session
+
+
+async def end_attendance_session(db: AsyncSession, current_user: User, session_id: UUID) -> dict[str, object]:
+    session_result = await db.execute(
+        select(AttendanceSession).where(AttendanceSession.session_id == session_id).with_for_update()
+    )
+    session = session_result.scalar_one_or_none()
+    if session is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Attendance session not found")
+
+    await _get_room_for_reader(db, current_user, session.room_id)
+
+    if session.status != "closed":
+        session.status = "closed"
+        session.ended_at = datetime.now(timezone.utc)
+
+    total_marked = await _count_attendance_records(db, session.session_id)
+    await db.commit()
+    await db.refresh(session)
+    return {
+        "session_id": session.session_id,
+        "ended_at": session.ended_at,
+        "status": session.status,
+        "total_marked": total_marked,
+    }
+
+
+async def get_active_attendance_session_for_room(
+    db: AsyncSession,
+    current_user: User,
+    room_id: UUID,
+) -> dict[str, object]:
+    await _get_room_for_reader(db, current_user, room_id)
+    session = await _get_active_attendance_session(db, room_id)
+    if session is None:
+        return {"session_id": None, "status": "none"}
+
+    marked_count = await _count_attendance_records(db, session.session_id)
+    return {
+        "session_id": session.session_id,
+        "room_id": session.room_id,
+        "course_id": session.course_id,
+        "started_at": session.started_at,
+        "status": session.status,
+        "marked_count": marked_count,
+    }
 
 
 async def process_environment_event(db: AsyncSession, payload: EnvironmentEventCreate) -> None:
@@ -178,55 +292,59 @@ async def get_attendance_report(
     date_to: datetime,
     student_id: UUID | None = None,
     course_id: UUID | None = None,
+    session_id: UUID | None = None,
 ) -> list[dict[str, object]]:
     conditions = [
-        AccessLog.room_id == room_id,
-        AccessLog.timestamp >= date_from,
-        AccessLog.timestamp <= date_to,
+        AttendanceRecord.room_id == room_id,
+        AttendanceRecord.marked_at >= date_from,
+        AttendanceRecord.marked_at <= date_to,
     ]
     if student_id is not None:
-        conditions.append(AccessLog.user_id == student_id)
+        conditions.append(AttendanceRecord.user_id == student_id)
     if course_id is not None:
-        conditions.append(AccessLog.course_id == course_id)
+        conditions.append(AttendanceRecord.course_id == course_id)
+    if session_id is not None:
+        conditions.append(AttendanceRecord.session_id == session_id)
 
-    if current_user.role == "student":
-        if student_id is not None and student_id != current_user.user_id:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Students can only read their own logs")
-        conditions.append(AccessLog.user_id == current_user.user_id)
-    elif current_user.role == "staff":
+    if current_user.role == "staff":
         assigned_rooms = [str(item) for item in (current_user.assigned_rooms or [])]
         if str(room_id) not in assigned_rooms:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Room is not assigned to this staff user")
-        conditions.append(cast(AccessLog.room_id, String).in_(assigned_rooms))
+        conditions.append(cast(AttendanceRecord.room_id, String).in_(assigned_rooms))
     elif current_user.role != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
 
     query = (
         select(
-            AccessLog.timestamp,
+            AttendanceRecord.marked_at,
+            AttendanceRecord.session_id,
             User.full_name,
             User.matric_number,
             Course.course_code,
             Course.course_name,
-            AccessLog.event_type,
-            AccessLog.door_state,
+            AttendanceSession.session_name,
+            AttendanceSession.started_at,
         )
-        .select_from(AccessLog)
-        .outerjoin(User, AccessLog.user_id == User.user_id)
-        .outerjoin(Course, AccessLog.course_id == Course.course_id)
+        .select_from(AttendanceRecord)
+        .join(AttendanceSession, AttendanceRecord.session_id == AttendanceSession.session_id)
+        .outerjoin(User, AttendanceRecord.user_id == User.user_id)
+        .outerjoin(Course, AttendanceRecord.course_id == Course.course_id)
         .where(and_(*conditions))
-        .order_by(AccessLog.timestamp.asc())
+        .order_by(AttendanceRecord.marked_at.asc())
     )
     result = await db.execute(query)
     return [
         {
-            "timestamp": row.timestamp,
+            "timestamp": row.marked_at,
             "full_name": row.full_name,
             "matric_number": row.matric_number,
             "course_code": row.course_code,
             "course_name": row.course_name,
-            "event_type": row.event_type,
-            "door_state": row.door_state,
+            "session_id": row.session_id,
+            "session_name": row.session_name,
+            "session_started_at": row.started_at,
+            "event_type": "attendance",
+            "marked_at": row.marked_at,
         }
         for row in result
     ]
@@ -281,6 +399,23 @@ async def _get_room(db: AsyncSession, room_id: UUID, lock_for_update: bool = Fal
     if room is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Room not found")
     return room
+
+
+async def _get_active_attendance_session(db: AsyncSession, room_id: UUID) -> AttendanceSession | None:
+    result = await db.execute(
+        select(AttendanceSession)
+        .where(and_(AttendanceSession.room_id == room_id, AttendanceSession.status == "active"))
+        .order_by(AttendanceSession.started_at.desc())
+        .limit(1)
+    )
+    return result.scalar_one_or_none()
+
+
+async def _count_attendance_records(db: AsyncSession, session_id: UUID) -> int:
+    result = await db.execute(
+        select(func.count()).select_from(AttendanceRecord).where(AttendanceRecord.session_id == session_id)
+    )
+    return int(result.scalar_one())
 
 
 async def _get_room_for_reader(db: AsyncSession, current_user: User, room_id: UUID) -> Room:

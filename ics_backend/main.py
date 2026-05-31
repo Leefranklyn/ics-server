@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from ics_backend.config import settings
-from ics_backend.routers import admin, analytics, auth, dashboard, esp32, reports
+from ics_backend.routers import admin, analytics, attendance_sessions, auth, dashboard, esp32, reports
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
@@ -28,6 +28,7 @@ app.include_router(auth.router)
 app.include_router(esp32.router)
 app.include_router(dashboard.router)
 app.include_router(reports.router)
+app.include_router(attendance_sessions.router)
 app.include_router(admin.router)
 app.include_router(analytics.router)
 

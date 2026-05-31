@@ -31,6 +31,8 @@ class Room(Base):
 
     courses = relationship("Course", back_populates="room")
     access_logs = relationship("AccessLog", back_populates="room")
+    attendance_sessions = relationship("AttendanceSession", back_populates="room")
+    attendance_records = relationship("AttendanceRecord", back_populates="room")
     occupancy_logs = relationship("OccupancyLog", back_populates="room")
     environment_logs = relationship("EnvironmentLog", back_populates="room")
     alerts = relationship("Alert", back_populates="room")

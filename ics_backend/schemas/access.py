@@ -54,5 +54,8 @@ class AttendanceReportRow(BaseModel):
     matric_number: str | None
     course_code: str | None
     course_name: str | None
+    session_id: UUID
+    session_name: str | None
+    session_started_at: datetime
     event_type: str
-    door_state: str
+    marked_at: datetime

@@ -1,5 +1,11 @@
 from ics_backend.schemas.access import AccessEventCreate, AccessEventResponse, EspUserCompact
 from ics_backend.schemas.alert import AlertAcknowledgeResponse, AlertResponse
+from ics_backend.schemas.attendance import (
+    AttendanceSessionActiveResponse,
+    AttendanceSessionEndResponse,
+    AttendanceSessionStartRequest,
+    AttendanceSessionStartResponse,
+)
 from ics_backend.schemas.auth import LoginRequest, TokenResponse
 from ics_backend.schemas.course import CourseResponse
 from ics_backend.schemas.environment import EnvironmentEventCreate, EnvironmentEventResponse
@@ -12,6 +18,10 @@ __all__ = [
     "AdminCardCreate",
     "AlertAcknowledgeResponse",
     "AlertResponse",
+    "AttendanceSessionActiveResponse",
+    "AttendanceSessionEndResponse",
+    "AttendanceSessionStartRequest",
+    "AttendanceSessionStartResponse",
     "CardStatusUpdate",
     "CourseResponse",
     "DashboardRoomResponse",
