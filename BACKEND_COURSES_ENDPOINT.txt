@@ -1,0 +1,142 @@
+Backend course loading details for frontend
+
+Current database status
+
+There are courses in the backend database.
+
+Rooms and courses currently available:
+
+1. CSC Lab
+   room_id: 486f969a-0a2b-46c1-8156-cbb7ff2468ef
+   course_id: e6dcf215-4610-451a-9784-a3a2a45ab33b
+   course_code: CSC 214
+   course_name: Data Structures
+
+2. Lecture Hall A
+   room_id: 88ef912b-b350-42dc-a224-0ac83371eecf
+   course_id: 0d9e4c22-f33a-4dc9-8e36-acaf6b3b63f6
+   course_code: GST 101
+   course_name: General Studies
+
+3. Physics Lab
+   room_id: 23aa30d5-e1c3-426c-bb79-f8aaee09b1ca
+   course_id: dab2cdbf-9c15-455d-bba2-53833183acc7
+   course_code: PHY 202
+   course_name: Electricity and Magnetism
+
+
+Backend endpoint for frontend
+
+Method:
+GET
+
+Path:
+/api/admin/rooms/{room_id}/courses
+
+Example:
+GET /api/admin/rooms/486f969a-0a2b-46c1-8156-cbb7ff2468ef/courses
+
+Auth:
+Bearer token is required.
+Allowed roles are staff and admin.
+
+Headers:
+Authorization: Bearer <token>
+
+
+Response shape
+
+The endpoint returns an array of courses.
+
+Example response:
+
+[
+  {
+    "course_id": "e6dcf215-4610-451a-9784-a3a2a45ab33b",
+    "course_code": "CSC 214",
+    "course_name": "Data Structures",
+    "room_id": "486f969a-0a2b-46c1-8156-cbb7ff2468ef",
+    "lecturer_id": "staff-user-uuid",
+    "schedule": {
+      "day": "Monday",
+      "start_time": "09:00",
+      "duration_mins": 90
+    },
+    "semester": "Rain",
+    "academic_year": "2025/2026"
+  }
+]
+
+
+Backend behavior
+
+1. The frontend sends the selected room_id in the URL.
+
+2. The backend verifies the user is staff or admin.
+
+3. If the user is admin, the backend allows reading courses for any room.
+
+4. If the user is staff, the backend checks that the selected room_id is inside the staff user's assigned_rooms array.
+
+5. If the staff user is not assigned to that room, the backend returns 403.
+
+6. If the room does not exist, the backend returns 404.
+
+7. If the room exists but has no courses, the backend returns an empty array.
+
+8. If courses exist, the backend returns them sorted by course_code.
+
+
+Important frontend mismatch found
+
+The frontend file currently still passes an empty array:
+
+SessionManager courses={[]}
+FilterBar courses={[]}
+
+That means the frontend will show no courses even when the backend has courses.
+
+The frontend needs to:
+
+1. Add API helper:
+
+export const getCoursesByRoom = async (roomId: string, token: string): Promise<Course[]> => {
+  return request<Course[]>(`/api/admin/rooms/${roomId}/courses`, token);
+};
+
+2. Store courses in state:
+
+const [courses, setCourses] = useState<Course[]>([]);
+
+3. Fetch courses whenever selectedRoomId changes:
+
+useEffect(() => {
+  if (!selectedRoomId || !token) {
+    setCourses([]);
+    return;
+  }
+
+  getCoursesByRoom(selectedRoomId, token)
+    .then(setCourses)
+    .catch(() => setCourses([]));
+}, [selectedRoomId, token]);
+
+4. Pass the fetched courses instead of an empty array:
+
+SessionManager courses={courses}
+FilterBar courses={courses}
+
+
+Staff room access notes
+
+admin@ics.edu:
+Can access all rooms.
+
+ade.musa@ics.edu:
+Can access CSC Lab and Lecture Hall A.
+
+nneka.okafor@ics.edu:
+Can access Physics Lab.
+
+If Dr. Ade selects Physics Lab, the backend returns 403.
+If Dr. Okafor selects CSC Lab or Lecture Hall A, the backend returns 403.

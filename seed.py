@@ -41,7 +41,7 @@ async def main() -> None:
         await db.flush()
 
         print("Rooms created:")
-        print(f"- CSC Lab (capacity: 40)")
+        print("- CSC Lab (capacity: 40)")
         print(f"- Physics Lab (capacity: 35)")
         print(f"- Lecture Hall A (capacity: 120)")
 

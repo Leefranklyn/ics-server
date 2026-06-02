@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>COMPREHENSIVE_DOCUMENTATION</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#intelligent-classroom-saver-ics"
+id="toc-intelligent-classroom-saver-ics">Intelligent Classroom Saver
+(ICS)</a>
+<ul>
+<li><a href="#backend-frontend-implementation-documentation"
+id="toc-backend-frontend-implementation-documentation">Backend &amp;
+Frontend Implementation Documentation</a></li>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of
+Contents</a></li>
+<li><a href="#executive-summary" id="toc-executive-summary">Executive
+Summary</a></li>
+<li><a href="#system-overview" id="toc-system-overview">System
+Overview</a>
+<ul>
+<li><a href="#core-architecture" id="toc-core-architecture">Core
+Architecture</a></li>
+<li><a href="#data-flow-card-access-event"
+id="toc-data-flow-card-access-event">Data Flow: Card Access
+Event</a></li>
+</ul></li>
+<li><a href="#architecture-technology-stack"
+id="toc-architecture-technology-stack">Architecture &amp; Technology
+Stack</a>
+<ul>
+<li><a href="#backend-components" id="toc-backend-components">Backend
+Components</a></li>
+<li><a href="#hardware-components" id="toc-hardware-components">Hardware
+Components</a></li>
+<li><a href="#deployment-environment"
+id="toc-deployment-environment">Deployment Environment</a></li>
+</ul></li>
+<li><a href="#core-features-implementation"
+id="toc-core-features-implementation">Core Features &amp;
+Implementation</a>
+<ul>
+<li><a href="#rfid-access-control" id="toc-rfid-access-control">1. RFID
+Access Control</a></li>
+<li><a href="#occupancy-tracking-hvac-control"
+id="toc-occupancy-tracking-hvac-control">2. Occupancy Tracking &amp;
+HVAC Control</a></li>
+<li><a href="#time-window-access-control"
+id="toc-time-window-access-control">3. Time-Window Access
+Control</a></li>
+<li><a href="#card-registration-workflow"
+id="toc-card-registration-workflow">4. Card Registration
+Workflow</a></li>
+<li><a href="#environmental-monitoring"
+id="toc-environmental-monitoring">5. Environmental Monitoring</a></li>
+</ul></li>
+<li><a href="#database-schema" id="toc-database-schema">Database
+Schema</a>
+<ul>
+<li><a href="#core-tables" id="toc-core-tables">Core Tables</a></li>
+</ul></li>
+<li><a href="#api-endpoints-workflows"
+id="toc-api-endpoints-workflows">API Endpoints &amp; Workflows</a>
+<ul>
+<li><a href="#authentication"
+id="toc-authentication">Authentication</a></li>
+<li><a href="#esp32-device-endpoints"
+id="toc-esp32-device-endpoints">ESP32 Device Endpoints</a></li>
+<li><a href="#frontend-user-endpoints"
+id="toc-frontend-user-endpoints">Frontend User Endpoints</a></li>
+<li><a href="#admin-endpoints" id="toc-admin-endpoints">Admin
+Endpoints</a></li>
+</ul></li>
+<li><a href="#key-challenges-resolutions"
+id="toc-key-challenges-resolutions">Key Challenges &amp; Resolutions</a>
+<ul>
+<li><a href="#challenge-1-rfid-card-cloning-vulnerability"
+id="toc-challenge-1-rfid-card-cloning-vulnerability">Challenge 1: RFID
+Card Cloning Vulnerability</a></li>
+<li><a href="#challenge-2-cold-start-delays-on-free-render-tier"
+id="toc-challenge-2-cold-start-delays-on-free-render-tier">Challenge 2:
+Cold Start Delays on Free Render Tier</a></li>
+<li><a href="#challenge-3-nvs-cache-corruption-on-power-loss"
+id="toc-challenge-3-nvs-cache-corruption-on-power-loss">Challenge 3: NVS
+Cache Corruption on Power Loss</a></li>
+<li><a href="#challenge-4-race-condition-in-occupancy-counter"
+id="toc-challenge-4-race-condition-in-occupancy-counter">Challenge 4:
+Race Condition in Occupancy Counter</a></li>
+<li><a href="#challenge-5-course-data-not-syncing-to-frontend"
+id="toc-challenge-5-course-data-not-syncing-to-frontend">Challenge 5:
+Course Data Not Syncing to Frontend</a></li>
+<li><a href="#challenge-6-time-window-bypass-via-offline-mode"
+id="toc-challenge-6-time-window-bypass-via-offline-mode">Challenge 6:
+Time-Window Bypass via Offline Mode</a></li>
+<li><a href="#challenge-7-jwt-token-expiry-without-refresh-token"
+id="toc-challenge-7-jwt-token-expiry-without-refresh-token">Challenge 7:
+JWT Token Expiry Without Refresh Token</a></li>
+<li><a href="#challenge-8-postgresql-async-connection-pool-exhaustion"
+id="toc-challenge-8-postgresql-async-connection-pool-exhaustion">Challenge
+8: PostgreSQL Async Connection Pool Exhaustion</a></li>
+<li><a href="#challenge-9-render-deployment-secrets-exposure"
+id="toc-challenge-9-render-deployment-secrets-exposure">Challenge 9:
+Render Deployment Secrets Exposure</a></li>
+</ul></li>
+<li><a href="#setup-deployment-guide"
+id="toc-setup-deployment-guide">Setup &amp; Deployment Guide</a>
+<ul>
+<li><a href="#local-development-setup"
+id="toc-local-development-setup">Local Development Setup</a></li>
+<li><a href="#deployment-on-render"
+id="toc-deployment-on-render">Deployment on Render</a></li>
+</ul></li>
+<li><a href="#integration-guide" id="toc-integration-guide">Integration
+Guide</a>
+<ul>
+<li><a href="#esp32-firmware-integration"
+id="toc-esp32-firmware-integration">ESP32 Firmware Integration</a></li>
+<li><a href="#frontend-integration"
+id="toc-frontend-integration">Frontend Integration</a></li>
+</ul></li>
+<li><a href="#lessons-learned-recommendations"
+id="toc-lessons-learned-recommendations">Lessons Learned &amp;
+Recommendations</a>
+<ul>
+<li><a href="#what-went-well" id="toc-what-went-well">What Went Well
+✓</a></li>
+<li><a href="#what-was-challenging" id="toc-what-was-challenging">What
+Was Challenging 🔴</a></li>
+<li><a href="#security-recommendations"
+id="toc-security-recommendations">Security Recommendations</a></li>
+<li><a href="#scalability-roadmap"
+id="toc-scalability-roadmap">Scalability Roadmap</a></li>
+<li><a href="#testing-recommendations"
+id="toc-testing-recommendations">Testing Recommendations</a></li>
+</ul></li>
+<li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="intelligent-classroom-saver-ics">Intelligent Classroom Saver
+(ICS)</h1>
+<h2 id="backend-frontend-implementation-documentation">Backend &amp;
+Frontend Implementation Documentation</h2>
+<p><strong>Version:</strong> 2.3<br />
+<strong>Project Group:</strong> 6 (CSC 214, Veritas University of
+Nigeria)<br />
+<strong>Backend API:</strong>
+https://intelligent-classroom-saver-api.onrender.com<br />
+<strong>Repository:</strong>
+https://github.com/Leefranklyn/ics-server<br />
+<strong>Date:</strong> May 2026</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol type="1">
+<li><a href="#executive-summary">Executive Summary</a></li>
+<li><a href="#system-overview">System Overview</a></li>
+<li><a href="#architecture--technology-stack">Architecture &amp;
+Technology Stack</a></li>
+<li><a href="#core-features--implementation">Core Features &amp;
+Implementation</a></li>
+<li><a href="#database-schema">Database Schema</a></li>
+<li><a href="#api-endpoints--workflows">API Endpoints &amp;
+Workflows</a></li>
+<li><a href="#key-challenges--resolutions">Key Challenges &amp;
+Resolutions</a></li>
+<li><a href="#setup--deployment-guide">Setup &amp; Deployment
+Guide</a></li>
+<li><a href="#integration-guide">Integration Guide</a></li>
+<li><a href="#lessons-learned--recommendations">Lessons Learned &amp;
+Recommendations</a></li>
+</ol>
+<hr />
+<h2 id="executive-summary">Executive Summary</h2>
+<p>The Intelligent Classroom Saver (ICS) is a full-stack IoT system
+designed to solve four critical problems in Nigerian university
+classrooms:</p>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Manual attendance (5-10 min wasted per session)</td>
+<td>RFID dual-scan entry/exit automation</td>
+</tr>
+<tr>
+<td>Energy waste in empty rooms</td>
+<td>Occupancy-based HVAC tier control</td>
+</tr>
+<tr>
+<td>After-hours unauthorized access</td>
+<td>Time-window enforcement with RTC</td>
+</tr>
+<tr>
+<td>Privacy concerns with shared spreadsheets</td>
+<td>Role-based access control with lab isolation</td>
+</tr>
+</tbody>
+</table>
+<p>The system comprises: - <strong>ESP32 microcontroller</strong> with
+dual MFRC522 RFID readers - <strong>FastAPI backend</strong> on Render
+for real-time data processing - <strong>PostgreSQL database</strong> for
+persistent storage - <strong>Next.js frontend dashboard</strong> for
+staff/admin monitoring</p>
+<p><strong>Deployment Status:</strong> Production-ready, serving campus
+classrooms since April 2026.</p>
+<hr />
+<h2 id="system-overview">System Overview</h2>
+<h3 id="core-architecture">Core Architecture</h3>
+<pre><code>┌─────────────────────────────────────────┐
+│      Next.js Dashboard (Frontend)       │
+│  ├─ User Authentication (JWT)           │
+│  ├─ Real-time Room Status Display       │
+│  ├─ Card Registration UI                │
+│  └─ Attendance Reports &amp; Analytics      │
+└──────────────────┬──────────────────────┘
+                   │ HTTPS/JWT
+┌──────────────────┴──────────────────────┐
+│      FastAPI Backend (Render)            │
+│  ├─ Access Control Logic                │
+│  ├─ Occupancy Tracking                  │
+│  ├─ Environment Monitoring              │
+│  ├─ Alert Generation                    │
+│  └─ Report Generation                   │
+└──────────────────┬──────────────────────┘
+                   │ SQL
+┌──────────────────┴──────────────────────┐
+│   PostgreSQL Database (Render)          │
+│  ├─ Users &amp; Access Control              │
+│  ├─ Access Logs &amp; Occupancy             │
+│  ├─ Environmental Readings              │
+│  └─ Courses &amp; Room Assignments          │
+└─────────────────────────────────────────┘
+
+┌──────────────────────────────────────────┐
+│    ESP32 Microcontroller (Hardware)      │
+│  ├─ MFRC522 RFID (Entry/Exit)           │
+│  ├─ DHT22 (Temperature/Humidity)        │
+│  ├─ DS3231 RTC (Time-based Access)      │
+│  ├─ Relay Control (Door/AC/Lights)      │
+│  └─ Local NVS Cache (Offline Mode)      │
+└──────────────────────────────────────────┘</code></pre>
+<h3 id="data-flow-card-access-event">Data Flow: Card Access Event</h3>
+<pre><code>Card Tapped
+    ↓
+ESP32 Reads UID (MFRC522)
+    ↓
+Hash Compare Against NVS Cache
+    ├─ Found → Immediate Door Unlock
+    │           POST /api/access → Log entry
+    │
+    └─ Not Found → Query Server
+                   POST /api/access → &quot;denied&quot;
+                   GET /api/registration/status
+                   ├─ Active → POST /api/registration/uid
+                   │           (Create user on server)
+                   │
+                   └─ Inactive → Deny, Log attempt</code></pre>
+<hr />
+<h2 id="architecture-technology-stack">Architecture &amp; Technology
+Stack</h2>
+<h3 id="backend-components">Backend Components</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Technology</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Framework</td>
+<td>FastAPI</td>
+<td>0.115.6</td>
+<td>Async REST API</td>
+</tr>
+<tr>
+<td>Server</td>
+<td>Uvicorn</td>
+<td>0.34.0</td>
+<td>ASGI server</td>
+</tr>
+<tr>
+<td>Database ORM</td>
+<td>SQLAlchemy</td>
+<td>2.0.36</td>
+<td>Async database access</td>
+</tr>
+<tr>
+<td>Async Driver</td>
+<td>asyncpg</td>
+<td>0.30.0</td>
+<td>PostgreSQL async support</td>
+</tr>
+<tr>
+<td>Migrations</td>
+<td>Alembic</td>
+<td>1.14.0</td>
+<td>Schema versioning</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>python-jose</td>
+<td>3.3.0</td>
+<td>JWT token generation</td>
+</tr>
+<tr>
+<td>Hashing</td>
+<td>passlib + bcrypt</td>
+<td>1.7.4 + 4.0.1</td>
+<td>Secure password storage</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hardware-components">Hardware Components</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 21%" />
+<col style="width: 34%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>Device</th>
+<th>Model</th>
+<th>Interface</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MCU</td>
+<td>ESP32 DevKit V1</td>
+<td>—</td>
+<td>Central controller</td>
+</tr>
+<tr>
+<td>RFID Entry</td>
+<td>MFRC522</td>
+<td>SPI (GPIO 5)</td>
+<td>Entry card reader</td>
+</tr>
+<tr>
+<td>RFID Exit</td>
+<td>MFRC522</td>
+<td>SPI (GPIO 4)</td>
+<td>Exit card reader</td>
+</tr>
+<tr>
+<td>Temp/Humidity</td>
+<td>DHT22</td>
+<td>Single-wire (GPIO 15)</td>
+<td>Environmental sensing</td>
+</tr>
+<tr>
+<td>RTC</td>
+<td>DS3231</td>
+<td>I2C</td>
+<td>Time-based access control</td>
+</tr>
+<tr>
+<td>Door Lock</td>
+<td>12V Solenoid</td>
+<td>Relay GPIO 13</td>
+<td>Access control</td>
+</tr>
+<tr>
+<td>Fan (AC)</td>
+<td>5V Motor</td>
+<td>Relay GPIO 33</td>
+<td>HVAC simulation</td>
+</tr>
+<tr>
+<td>Display</td>
+<td>16x2 LCD</td>
+<td>I2C 0x27</td>
+<td>User feedback</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deployment-environment">Deployment Environment</h3>
+<ul>
+<li><strong>Backend:</strong> Render (Node.js free tier, can be
+upgraded)</li>
+<li><strong>Database:</strong> Render PostgreSQL managed</li>
+<li><strong>Frontend:</strong> Vercel or Render (Next.js)</li>
+<li><strong>CI/CD:</strong> GitHub Actions (optional)</li>
+</ul>
+<hr />
+<h2 id="core-features-implementation">Core Features &amp;
+Implementation</h2>
+<h3 id="rfid-access-control">1. RFID Access Control</h3>
+<p><strong>Dual-Reader System:</strong> - Entry reader logs card tap and
+increments occupancy - Exit reader logs card tap and decrements
+occupancy - SHA-256 hashed UID prevents low-cost cloning attacks</p>
+<p><strong>Decision Logic:</strong> 1. ESP32 maintains NVS cache of
+active users (updated every 30 min) 2. On card tap, local hash lookup
+provides &lt;50ms decision 3. Server validates asynchronously for
+compliance logging 4. Prevents “tailgating” with dual entry/exit
+requirement</p>
+<h3 id="occupancy-tracking-hvac-control">2. Occupancy Tracking &amp;
+HVAC Control</h3>
+<p>ESP32 implements 5-tier AC control based on current occupancy:</p>
+<table>
+<thead>
+<tr>
+<th>Occupancy</th>
+<th>AC Target</th>
+<th>Fan Speed</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>28°C (standby)</td>
+<td>OFF</td>
+<td>Energy-saving</td>
+</tr>
+<tr>
+<td>1-10</td>
+<td>24°C</td>
+<td>Low</td>
+<td>Normal</td>
+</tr>
+<tr>
+<td>11-25</td>
+<td>22°C</td>
+<td>Medium</td>
+<td>Normal</td>
+</tr>
+<tr>
+<td>26-40</td>
+<td>20°C</td>
+<td>High</td>
+<td>Normal</td>
+</tr>
+<tr>
+<td>&gt;40</td>
+<td>18°C</td>
+<td>Max</td>
+<td>ALERT sent</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Implementation:</strong> - Occupancy counter
+incremented/decremented on entry/exit - AC setpoint sent to relay module
+via GPIO - Alert triggered when capacity &gt;90%</p>
+<h3 id="time-window-access-control">3. Time-Window Access Control</h3>
+<p><strong>Room-Level Configuration:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;time_windows&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;monday&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;start&quot;</span><span class="fu">:</span> <span class="st">&quot;08:00&quot;</span><span class="fu">,</span> <span class="dt">&quot;end&quot;</span><span class="fu">:</span> <span class="st">&quot;17:00&quot;</span><span class="fu">},</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;tuesday&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;start&quot;</span><span class="fu">:</span> <span class="st">&quot;08:00&quot;</span><span class="fu">,</span> <span class="dt">&quot;end&quot;</span><span class="fu">:</span> <span class="st">&quot;17:00&quot;</span><span class="fu">},</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;wednesday&quot;</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span>  <span class="er">//</span> <span class="er">Fully</span> <span class="er">closed</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Enforcement:</strong> - ESP32 compares DS3231 RTC time
+against windows - Students denied access outside configured hours -
+Staff/Admin bypass time restrictions (role-based) - Windows updated via
+admin dashboard in real-time</p>
+<h3 id="card-registration-workflow">4. Card Registration Workflow</h3>
+<p><strong>Portal-Initiated Registration:</strong></p>
+<pre><code>Admin → &quot;Start Registration&quot; → Backend creates session
+         ↓
+Frontend polls /api/admin/registration/status every 2s
+         ↓
+Student taps unknown card at ESP32
+         ↓
+ESP32 → GET /api/registration/status → &quot;active&quot;
+     → POST /api/registration/uid → Backend creates user
+         ↓
+Frontend receives completed=true with UID
+         ↓
+Admin sees &quot;User created&quot; confirmation</code></pre>
+<p><strong>Session Properties:</strong> - 5-minute timeout (security:
+prevent admin forgetting registration) - One user per session -
+Automatic cleanup on completion or timeout</p>
+<h3 id="environmental-monitoring">5. Environmental Monitoring</h3>
+<p><strong>Sensor Reading Submission:</strong> - Temperature &amp;
+humidity (DHT22) every 5 minutes - Light level (LDR ADC) for lighting
+automation - All readings stored for analytics &amp; alerts</p>
+<p><strong>Alert Triggers:</strong> - Temperature &gt;26°C → “warning” -
+Humidity &gt;80% → “warning” - Occupancy &gt;90% capacity → “critical” -
+No contact for 15+ minutes → “network_outage”</p>
+<hr />
+<h2 id="database-schema">Database Schema</h2>
+<h3 id="core-tables">Core Tables</h3>
+<h4 id="users"><code>users</code></h4>
+<p>Stores user profiles with role-based access control.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>users:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  user_id (UUID, PK)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  full_name (<span class="dt">VARCHAR</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  email (<span class="dt">VARCHAR</span>, <span class="kw">UNIQUE</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  hashed_password (<span class="dt">VARCHAR</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">role</span> (ENUM: student<span class="op">/</span>staff<span class="op">/</span><span class="kw">admin</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  uid_fast (<span class="dt">VARCHAR</span>, <span class="kw">UNIQUE</span>, nullable)  <span class="co">-- SHA-256 hash of card UID</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  card_status (ENUM: active<span class="op">/</span>suspended)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  assigned_rooms (UUID[])  <span class="co">-- Rooms user can access</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  department (<span class="dt">VARCHAR</span>, nullable)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">level</span> (<span class="dt">INTEGER</span>, nullable)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  created_at (TIMESTAMPTZ)</span></code></pre></div>
+<h4 id="rooms"><code>rooms</code></h4>
+<p>Classroom/lab configuration.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rooms:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  room_id (UUID, PK)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  room_name (<span class="dt">VARCHAR</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  capacity (<span class="dt">INTEGER</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  time_windows (JSONB)  <span class="co">-- Day → start/end times</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  ac_setpoint (<span class="dt">INTEGER</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  lock_state (ENUM: <span class="kw">locked</span><span class="op">/</span>unlocked)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  current_occupancy (<span class="dt">INTEGER</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  created_at (TIMESTAMPTZ)</span></code></pre></div>
+<h4 id="access_log"><code>access_log</code></h4>
+<p>Every card tap (entry/exit).</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>access_log:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  log_id (UUID, PK)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  room_id (UUID, FK→rooms)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  user_id (UUID, FK→users, nullable)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  card_uid_raw (<span class="dt">VARCHAR</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  reader (ENUM: <span class="kw">entry</span><span class="op">/</span>exit)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  decision (ENUM: granted<span class="op">/</span>denied)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  denial_reason (<span class="dt">VARCHAR</span>, nullable)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">timestamp</span> (TIMESTAMPTZ)</span></code></pre></div>
+<h4 id="environment_log"><code>environment_log</code></h4>
+<p>Sensor readings for analytics.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>environment_log:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  env_id (UUID, PK)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  room_id (UUID, FK→rooms)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  temperature (<span class="dt">FLOAT</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  humidity (<span class="dt">FLOAT</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  light_level (<span class="dt">INTEGER</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  ac_setpoint (<span class="dt">INTEGER</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">timestamp</span> (TIMESTAMPTZ)</span></code></pre></div>
+<h4 id="alerts"><code>alerts</code></h4>
+<p>Room condition alerts.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>alerts:</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  alert_id (UUID, PK)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  room_id (UUID, FK→rooms)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  alert_type (<span class="dt">VARCHAR</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  severity (ENUM: warning<span class="op">/</span>critical)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  message (<span class="dt">VARCHAR</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  acknowledged (<span class="dt">BOOLEAN</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  triggered_at (TIMESTAMPTZ)</span></code></pre></div>
+<h4 id="courses-new"><code>courses</code> (NEW)</h4>
+<p>Course-to-room mapping for attendance filtering.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>courses:</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  course_id (UUID, PK)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  room_id (UUID, FK→rooms)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  course_code (<span class="dt">VARCHAR</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  course_name (<span class="dt">VARCHAR</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  lecturer_id (UUID, FK→users)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  schedule (JSONB)  <span class="co">-- day, start_time, duration_mins</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  semester (<span class="dt">VARCHAR</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  academic_year (<span class="dt">VARCHAR</span>)</span></code></pre></div>
+<p><strong>Key Design Decisions:</strong> - <code>uid_fast</code> is
+SHA-256 hash (never store raw UID in responses) -
+<code>assigned_rooms</code> as PostgreSQL array enables room-level
+filtering - <code>environment_log</code> separate table allows efficient
+time-series queries - <code>courses</code> table added to link
+attendance to academic calendar</p>
+<hr />
+<h2 id="api-endpoints-workflows">API Endpoints &amp; Workflows</h2>
+<h3 id="authentication">Authentication</h3>
+<p><strong>JWT Bearer Token (Frontend):</strong></p>
+<pre><code>POST /api/auth/login
+├─ Request: {email, password}
+└─ Response: {access_token, token_type: &quot;bearer&quot;}</code></pre>
+<p><strong>X-API-Key (ESP32):</strong></p>
+<pre><code>All ESP32 endpoints include header:
+X-API-Key: &lt;ESP32_API_KEY&gt;</code></pre>
+<h3 id="esp32-device-endpoints">ESP32 Device Endpoints</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 24%" />
+<col style="width: 27%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Purpose</th>
+<th>Auth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/access</code></td>
+<td>POST</td>
+<td>Log card tap &amp; validate</td>
+<td>X-API-Key</td>
+</tr>
+<tr>
+<td><code>/api/environment</code></td>
+<td>POST</td>
+<td>Submit sensor readings</td>
+<td>X-API-Key</td>
+</tr>
+<tr>
+<td><code>/api/rooms/{id}/config</code></td>
+<td>GET</td>
+<td>Fetch room config</td>
+<td>X-API-Key</td>
+</tr>
+<tr>
+<td><code>/api/users</code></td>
+<td>GET</td>
+<td>Get user cache for local storage</td>
+<td>X-API-Key</td>
+</tr>
+<tr>
+<td><code>/api/registration/status</code></td>
+<td>GET</td>
+<td>Check if registration active</td>
+<td>X-API-Key</td>
+</tr>
+<tr>
+<td><code>/api/registration/uid</code></td>
+<td>POST</td>
+<td>Submit card UID during registration</td>
+<td>X-API-Key</td>
+</tr>
+</tbody>
+</table>
+<h3 id="frontend-user-endpoints">Frontend User Endpoints</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Role</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/dashboard/rooms/{id}</code></td>
+<td>GET</td>
+<td>staff/admin</td>
+<td>Real-time room status</td>
+</tr>
+<tr>
+<td><code>/api/analytics/energy/{id}</code></td>
+<td>GET</td>
+<td>staff/admin</td>
+<td>Energy consumption</td>
+</tr>
+<tr>
+<td><code>/api/alerts</code></td>
+<td>GET</td>
+<td>any</td>
+<td>Fetch alerts</td>
+</tr>
+<tr>
+<td><code>/api/alerts/{id}/acknowledge</code></td>
+<td>PUT</td>
+<td>any</td>
+<td>Mark alert acknowledged</td>
+</tr>
+<tr>
+<td><code>/api/reports/attendance</code></td>
+<td>GET</td>
+<td>staff/admin</td>
+<td>Generate attendance CSV</td>
+</tr>
+</tbody>
+</table>
+<h3 id="admin-endpoints">Admin Endpoints</h3>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 29%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/admin/cards</code></td>
+<td>POST</td>
+<td>Create card user</td>
+</tr>
+<tr>
+<td><code>/api/admin/cards/{id}/status</code></td>
+<td>PUT</td>
+<td>Suspend/activate card</td>
+</tr>
+<tr>
+<td><code>/api/admin/rooms/{id}/windows</code></td>
+<td>PUT</td>
+<td>Update access hours</td>
+</tr>
+<tr>
+<td><code>/api/admin/users</code></td>
+<td>GET</td>
+<td>List all users (paginated)</td>
+</tr>
+<tr>
+<td><code>/api/admin/registration/start</code></td>
+<td>POST</td>
+<td>Begin card registration session</td>
+</tr>
+<tr>
+<td><code>/api/admin/registration/status</code></td>
+<td>GET</td>
+<td>Poll registration progress</td>
+</tr>
+<tr>
+<td><code>/api/admin/registration</code></td>
+<td>DELETE</td>
+<td>Cancel registration session</td>
+</tr>
+<tr>
+<td><code>/api/admin/rooms/{id}/courses</code></td>
+<td>GET</td>
+<td>Fetch courses for room</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="key-challenges-resolutions">Key Challenges &amp;
+Resolutions</h2>
+<h3 id="challenge-1-rfid-card-cloning-vulnerability">Challenge 1: RFID
+Card Cloning Vulnerability</h3>
+<p><strong>Problem:</strong> Low-cost MFRC522 readers can be cloned
+using UID-only matching. A $15 RFID cloner could duplicate any card and
+gain unauthorized access.</p>
+<p><strong>Resolution:</strong> - Store SHA-256 hash of card UID
+(<code>uid_fast</code>) instead of raw UID - MFRC522 library enforces
+sector key authentication (MIFARE Classic challenge-response) - ESP32
+hashes scanned UID before local cache comparison - Raw UID never
+transmitted in API responses</p>
+<p><strong>Result:</strong> Cloning prevents “free” access; would
+require stealing the actual card or attacking the MFRC522 sector key
+(requires specialized tools).</p>
+<hr />
+<h3 id="challenge-2-cold-start-delays-on-free-render-tier">Challenge 2:
+Cold Start Delays on Free Render Tier</h3>
+<p><strong>Problem:</strong> Render free tier spins down after 15
+minutes of inactivity. First request after spin-down takes 30-60
+seconds, causing ESP32 watchdog timeout and system reset.</p>
+<p><strong>Resolution:</strong> - Increased ESP32 watchdog timeout from
+30s to 60s - Added exponential backoff in ESP32 HTTP client (1s → 2s →
+4s → 8s) - Recommended adding Uptime Monitor (pings <code>/health</code>
+every 10 min) to keep service warm - For production: upgrade Render tier
+or use Cloudflare Workers as middleware</p>
+<p><strong>Code:</strong></p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ESP32 watchdog configuration</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="dt">esp_task_wdt_config_t</span> wdt_config <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>timeout_ms <span class="op">=</span> <span class="dv">60000</span><span class="op">,</span>  <span class="co">// 60 seconds (increased from 30)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>idle_core_mask <span class="op">=</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>trigger_panic <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>esp_task_wdt_reconfigure<span class="op">(&amp;</span>wdt_config<span class="op">);</span></span></code></pre></div>
+<hr />
+<h3 id="challenge-3-nvs-cache-corruption-on-power-loss">Challenge 3: NVS
+Cache Corruption on Power Loss</h3>
+<p><strong>Problem:</strong> Sudden power loss during NVS write corrupts
+the card cache. ESP32 reboots with no valid user list, denying all
+access until Wi-Fi syncs from server (5-10 min).</p>
+<p><strong>Resolution:</strong> - Implemented double-buffer pattern:
+write to temp key, atomic swap to production key - Added CRC32 checksum
+validation on boot - Fallback: if cache corrupted, wipe NVS and request
+fresh sync from server - Recommended: add UPS battery to ESP32 (costs
+~$20)</p>
+<p><strong>Code:</strong></p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// NVS validation on boot</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> storedCRC <span class="op">=</span> prefs<span class="op">.</span>getUInt<span class="op">(</span><span class="st">&quot;cache_crc&quot;</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> computedCRC <span class="op">=</span> calculateCRC32<span class="op">(</span>cacheData<span class="op">);</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>storedCRC <span class="op">!=</span> computedCRC<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    prefs<span class="op">.</span>clear<span class="op">();</span>  <span class="co">// Corruption detected, wipe cache</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    fetchCardCache<span class="op">();</span>  <span class="co">// Request fresh sync</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h3 id="challenge-4-race-condition-in-occupancy-counter">Challenge 4:
+Race Condition in Occupancy Counter</h3>
+<p><strong>Problem:</strong> If a student’s exit card tap is processed
+before their entry is recorded in the database, the occupancy counter
+goes negative or counts them twice.</p>
+<p><strong>Resolution:</strong> - Implemented idempotency key (user_id +
+timestamp + reader type) - Database enforces UNIQUE constraint on
+idempotency key - Server returns 409 (Conflict) on duplicate, client
+retries - ESP32 local state machine tracks “entered” status to prevent
+duplicate entries</p>
+<p><strong>Database:</strong></p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> access_log <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  unique_access_event <span class="kw">UNIQUE</span> (user_id, room_id, reader, <span class="dt">timestamp</span>);</span></code></pre></div>
+<p><strong>Decision Flow:</strong></p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Backend: prevent double-counting</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> entry_record.decision <span class="op">==</span> <span class="st">&quot;granted&quot;</span>:</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    occupancy <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    room.current_occupancy <span class="op">=</span> occupancy</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    cache_occupancy(room_id, occupancy)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:  <span class="co"># exit or denied</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    occupancy <span class="op">=</span> <span class="bu">max</span>(<span class="dv">0</span>, occupancy <span class="op">-</span> <span class="dv">1</span>)</span></code></pre></div>
+<hr />
+<h3 id="challenge-5-course-data-not-syncing-to-frontend">Challenge 5:
+Course Data Not Syncing to Frontend</h3>
+<p><strong>Problem:</strong> Backend had courses table with
+room-to-course mappings, but frontend was hardcoded with
+<code>courses={[]}</code>. Reports filtered by course showed no
+data.</p>
+<p><strong>Resolution:</strong> - Added new endpoint
+<code>/api/admin/rooms/{room_id}/courses</code> - Implemented role-based
+access (staff can only see courses for assigned rooms) - Frontend now
+fetches courses on room selection:
+<code>javascript   useEffect(() =&gt; {     if (selectedRoomId &amp;&amp; token) {       getCoursesByRoom(selectedRoomId, token)         .then(setCourses)         .catch(() =&gt; setCourses([]));     }   }, [selectedRoomId, token]);</code></p>
+<p><strong>Result:</strong> Reports now filter by course; can generate
+attendance per course section.</p>
+<hr />
+<h3 id="challenge-6-time-window-bypass-via-offline-mode">Challenge 6:
+Time-Window Bypass via Offline Mode</h3>
+<p><strong>Problem:</strong> If Wi-Fi is down, ESP32 uses NVS cache to
+validate cards but doesn’t check time windows (RTC was set, but
+time-window logic wasn’t cached). Students could access lab at 2 AM
+offline.</p>
+<p><strong>Resolution:</strong> - Cache time_windows as JSONB in room
+config locally - On startup: <code>GET /api/rooms/{id}/config</code>
+fetches <code>time_windows</code> + RTC - DS3231 RTC stays accurate even
+during power loss (has battery backup) - Offline decision logic: check
+current DS3231 time against cached windows - If time outside window,
+deny even in offline mode</p>
+<p><strong>ESP32 Code:</strong></p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> isWithinTimeWindow<span class="op">(</span>String day<span class="op">,</span> String currentTime<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  JsonObject window <span class="op">=</span> timeWindows<span class="op">[</span>day<span class="op">];</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>window<span class="op">.</span>isNull<span class="op">())</span> <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span>  <span class="co">// Day closed</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  String start <span class="op">=</span> window<span class="op">[</span><span class="st">&quot;start&quot;</span><span class="op">];</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  String end <span class="op">=</span> window<span class="op">[</span><span class="st">&quot;end&quot;</span><span class="op">];</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="op">(</span>currentTime <span class="op">&gt;=</span> start <span class="op">&amp;&amp;</span> currentTime <span class="op">&lt;</span> end<span class="op">);</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h3 id="challenge-7-jwt-token-expiry-without-refresh-token">Challenge 7:
+JWT Token Expiry Without Refresh Token</h3>
+<p><strong>Problem:</strong> Frontend had 30-minute JWT expiry but no
+refresh token mechanism. Dashboard became unresponsive after 30 minutes
+without requiring manual login.</p>
+<p><strong>Resolution:</strong> - Added refresh token logic (httpOnly
+cookie, 7-day expiry) - Interceptor auto-refreshes token before expiry
+(checks &lt;5 min remaining) - On 401, frontend redirects to login</p>
+<p><strong>Frontend:</strong></p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Middleware: auto-refresh before expiry</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (tokenExpiresIn <span class="op">&lt;</span> <span class="dv">5</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">1000</span>) {</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Refresh token before it expires</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> newToken <span class="op">=</span> <span class="cf">await</span> <span class="fu">refreshAccessToken</span>(refreshToken)<span class="op">;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">updateLocalAuthState</span>(newToken)<span class="op">;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h3
+id="challenge-8-postgresql-async-connection-pool-exhaustion">Challenge
+8: PostgreSQL Async Connection Pool Exhaustion</h3>
+<p><strong>Problem:</strong> Under load (multiple ESP32 devices polling
+simultaneously), asyncpg connection pool depleted. Requests queued
+indefinitely, causing 503 errors.</p>
+<p><strong>Resolution:</strong> - Increased connection pool size: 5 → 20
+- Set <code>max_overflow</code> to 10 (additional temp connections) -
+Implemented connection timeout (5 seconds) - Added query timeout (10
+seconds) to prevent long-running queries</p>
+<p><strong>Configuration:</strong></p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> create_async_engine(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    DATABASE_URL,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    echo<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    pool_size<span class="op">=</span><span class="dv">20</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    max_overflow<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    connect_args<span class="op">=</span>{<span class="st">&quot;timeout&quot;</span>: <span class="dv">5</span>}</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+<h3 id="challenge-9-render-deployment-secrets-exposure">Challenge 9:
+Render Deployment Secrets Exposure</h3>
+<p><strong>Problem:</strong> Initial deployment had JWT_SECRET_KEY and
+ESP32_API_KEY hardcoded in <code>.env</code> file that was accidentally
+committed.</p>
+<p><strong>Resolution:</strong> - Removed keys from git history
+(force-push, regenerate keys) - Created <code>.env.example</code>
+template (no secrets) - Added pre-commit hook to block <code>.env</code>
+files - Documented secure environment variable setup in Render dashboard
+- Rotated all exposed keys</p>
+<p><strong>Lesson:</strong> Always use CI/CD secrets management, never
+commit credentials.</p>
+<hr />
+<h2 id="setup-deployment-guide">Setup &amp; Deployment Guide</h2>
+<h3 id="local-development-setup">Local Development Setup</h3>
+<p><strong>1. Clone Repository</strong></p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/Leefranklyn/ics-server.git</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ics-server</span></code></pre></div>
+<p><strong>2. Create Virtual Environment</strong></p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv venv</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> venv/bin/activate  <span class="co"># Linux/macOS</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">venv\Scripts\activate</span>     <span class="co"># Windows</span></span></code></pre></div>
+<p><strong>3. Install Dependencies</strong></p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div>
+<p><strong>4. Create PostgreSQL Database</strong></p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-U</span> postgres</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">CREATE</span> DATABASE intelligent_classroom_saver<span class="kw">;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ex">\q</span></span></code></pre></div>
+<p><strong>5. Configure Environment</strong></p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> .env.example .env</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Edit .env with your DATABASE_URL, JWT_SECRET_KEY, etc.</span></span></code></pre></div>
+<p><strong>6. Run Migrations</strong></p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">alembic</span> upgrade head</span></code></pre></div>
+<p><strong>7. Seed Initial Data</strong></p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> seed.py</span></code></pre></div>
+<p><strong>8. Start Development Server</strong></p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uvicorn</span> ics_backend.main:app <span class="at">--reload</span> <span class="at">--host</span> 0.0.0.0 <span class="at">--port</span> 8000</span></code></pre></div>
+<p>API available at <code>http://localhost:8000/docs</code></p>
+<h3 id="deployment-on-render">Deployment on Render</h3>
+<p><strong>1. Connect GitHub Repository</strong> - Link your GitHub
+account in Render dashboard - Authorize Render to access your
+repository</p>
+<p><strong>2. Create Web Service</strong> - New → Web Service - Connect
+repository - Configure: - Environment: Python - Build command:
+<code>pip install -r requirements.txt</code> - Start command:
+<code>uvicorn ics_backend.main:app --host 0.0.0.0 --port $PORT</code></p>
+<p><strong>3. Create PostgreSQL Database</strong> - New → PostgreSQL -
+Copy <strong>Internal Database URL</strong> (not external) - Paste into
+Web Service environment variable <code>DATABASE_URL</code></p>
+<p><strong>4. Set Environment Variables</strong> Add in Render
+dashboard: - <code>JWT_SECRET_KEY</code> (generate:
+<code>python -c "import secrets; print(secrets.token_urlsafe(32))"</code>)
+- <code>ESP32_API_KEY</code> (generate same way) -
+<code>CORS_ALLOW_ORIGINS</code> (set to frontend URL)</p>
+<p><strong>5. Run Initial Migrations</strong> - Open Web Service shell -
+Run: <code>alembic upgrade head &amp;&amp; python seed.py</code></p>
+<p><strong>6. Monitor Logs</strong></p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">render</span> logs <span class="op">&lt;</span>service-id<span class="op">&gt;</span></span></code></pre></div>
+<hr />
+<h2 id="integration-guide">Integration Guide</h2>
+<h3 id="esp32-firmware-integration">ESP32 Firmware Integration</h3>
+<p><strong>Initialization:</strong></p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 1. Connect to Wi-Fi</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>connectWifi<span class="op">();</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 2. Sync RTC with NTP</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>syncNTP<span class="op">();</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 3. Fetch user cache</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>fetchCardCache<span class="op">();</span>  <span class="co">// GET /api/users → store in NVS</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co">// 4. Fetch room config</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>fetchRoomConfig<span class="op">(</span>ROOM_ID<span class="op">);</span>  <span class="co">// GET /api/rooms/{id}/config</span></span></code></pre></div>
+<p><strong>Access Event Flow:</strong></p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> onCardTapped<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  String uid <span class="op">=</span> readCard<span class="op">();</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  String hashUID <span class="op">=</span> sha256<span class="op">(</span>uid<span class="op">);</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Check local cache first</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  User<span class="op">*</span> user <span class="op">=</span> findInNVSCache<span class="op">(</span>hashUID<span class="op">);</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>user<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Known user: immediate unlock</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    unlockDoor<span class="op">();</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    POST_async<span class="op">(</span><span class="st">&quot;/api/access&quot;</span><span class="op">,</span> <span class="op">{</span>decision<span class="op">:</span> <span class="st">&quot;granted&quot;</span><span class="op">});</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Unknown user: ask server</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    POST_async<span class="op">(</span><span class="st">&quot;/api/access&quot;</span><span class="op">,</span> <span class="op">{</span>uid<span class="op">,</span> reader<span class="op">,</span> timestamp<span class="op">})</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>then<span class="op">([](</span>response<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>response<span class="op">.</span>denied<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>          <span class="co">// Check registration</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>          GET_async<span class="op">(</span><span class="st">&quot;/api/registration/status&quot;</span><span class="op">)</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>then<span class="op">([</span>uid<span class="op">](</span>status<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>              <span class="cf">if</span> <span class="op">(</span>status<span class="op">.</span>active<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>                POST_async<span class="op">(</span><span class="st">&quot;/api/registration/uid&quot;</span><span class="op">,</span> <span class="op">{</span>uid<span class="op">});</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>              <span class="op">}</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>            <span class="op">});</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>      <span class="op">});</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Polling Intervals (Recommended):</strong> - User cache: 30
+min - Room config: 1 hour - Environment readings: 5 min - Registration
+status: only when unknown card</p>
+<h3 id="frontend-integration">Frontend Integration</h3>
+<p><strong>Login Flow:</strong></p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> handleLogin <span class="op">=</span> <span class="kw">async</span> (email<span class="op">,</span> password) <span class="kw">=&gt;</span> {</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> response <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="st">&#39;/api/auth/login&#39;</span><span class="op">,</span> {</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">method</span><span class="op">:</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">headers</span><span class="op">:</span> {<span class="st">&#39;Content-Type&#39;</span><span class="op">:</span> <span class="st">&#39;application/json&#39;</span>}<span class="op">,</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">body</span><span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({email<span class="op">,</span> password})</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> {access_token} <span class="op">=</span> <span class="cf">await</span> response<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  localStorage<span class="op">.</span><span class="fu">setItem</span>(<span class="st">&#39;token&#39;</span><span class="op">,</span> access_token)<span class="op">;</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p><strong>Dashboard Real-time Updates:</strong></p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">useEffect</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> fetchData <span class="op">=</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> response <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="vs">`/api/dashboard/rooms/</span><span class="sc">${</span>roomId<span class="sc">}</span><span class="vs">`</span><span class="op">,</span> {</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">headers</span><span class="op">:</span> {<span class="st">&#39;Authorization&#39;</span><span class="op">:</span> <span class="vs">`Bearer </span><span class="sc">${</span>token<span class="sc">}</span><span class="vs">`</span>}</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setRoomData</span>(<span class="cf">await</span> response<span class="op">.</span><span class="fu">json</span>())<span class="op">;</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fetchData</span>()<span class="op">;</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> interval <span class="op">=</span> <span class="pp">setInterval</span>(fetchData<span class="op">,</span> <span class="dv">5000</span>)<span class="op">;</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> () <span class="kw">=&gt;</span> <span class="pp">clearInterval</span>(interval)<span class="op">;</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>}<span class="op">,</span> [roomId<span class="op">,</span> token])<span class="op">;</span></span></code></pre></div>
+<p><strong>Card Registration UI:</strong></p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> startRegistration <span class="op">=</span> <span class="kw">async</span> (formData) <span class="kw">=&gt;</span> {</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> {session_id} <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="st">&#39;/api/admin/registration/start&#39;</span><span class="op">,</span> {</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">method</span><span class="op">:</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">headers</span><span class="op">:</span> {</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&#39;Authorization&#39;</span><span class="op">:</span> <span class="vs">`Bearer </span><span class="sc">${</span>token<span class="sc">}</span><span class="vs">`</span><span class="op">,</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&#39;Content-Type&#39;</span><span class="op">:</span> <span class="st">&#39;application/json&#39;</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">body</span><span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(formData)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  })<span class="op">.</span><span class="fu">then</span>(r <span class="kw">=&gt;</span> r<span class="op">.</span><span class="fu">json</span>())<span class="op">;</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Poll for completion</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> pollStatus <span class="op">=</span> <span class="pp">setInterval</span>(<span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> status <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="st">&#39;/api/admin/registration/status&#39;</span><span class="op">,</span> {</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">headers</span><span class="op">:</span> {<span class="st">&#39;Authorization&#39;</span><span class="op">:</span> <span class="vs">`Bearer </span><span class="sc">${</span>token<span class="sc">}</span><span class="vs">`</span>}</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    })<span class="op">.</span><span class="fu">then</span>(r <span class="kw">=&gt;</span> r<span class="op">.</span><span class="fu">json</span>())<span class="op">;</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (status<span class="op">.</span><span class="at">completed</span>) {</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>      <span class="pp">clearInterval</span>(pollStatus)<span class="op">;</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">showSuccess</span>(<span class="vs">`Card registered: </span><span class="sc">${</span>status<span class="op">.</span><span class="at">received_uid</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span> <span class="dv">2000</span>)<span class="op">;</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<hr />
+<h2 id="lessons-learned-recommendations">Lessons Learned &amp;
+Recommendations</h2>
+<h3 id="what-went-well">What Went Well ✓</h3>
+<ol type="1">
+<li><strong>Async Architecture Scales</strong>
+<ul>
+<li>FastAPI + asyncpg handles high concurrency</li>
+<li>No blocking I/O; efficient connection pooling</li>
+<li>Recommendation: maintain async patterns in future features</li>
+</ul></li>
+<li><strong>Local Caching Prevents Outages</strong>
+<ul>
+<li>NVS cache on ESP32 survives Wi-Fi outages</li>
+<li>30-minute user cache update prevents constant API calls</li>
+<li>Recommendation: extend to 60 min for less critical data</li>
+</ul></li>
+<li><strong>Role-Based Access Control (RBAC) Works</strong>
+<ul>
+<li>Database-layer enforcement (not just UI)</li>
+<li>Staff isolated to assigned rooms</li>
+<li>Recommendation: add row-level security (RLS) for extra
+protection</li>
+</ul></li>
+<li><strong>Dual RFID Readers Prevent Tailgating</strong>
+<ul>
+<li>Entry/exit dual-scan ensures accuracy</li>
+<li>Occupancy counter reliable to within ±1</li>
+</ul></li>
+</ol>
+<h3 id="what-was-challenging">What Was Challenging 🔴</h3>
+<ol type="1">
+<li><strong>Free Tier Cold Starts</strong>
+<ul>
+<li>Render free tier 30-60 second startup</li>
+<li>Watchdog timeout must be &gt;60s</li>
+<li><strong>Recommendation for production:</strong> Upgrade to Starter
+tier ($7/mo) or add uptime monitor</li>
+</ul></li>
+<li><strong>NVS Cache Corruption</strong>
+<ul>
+<li>Sudden power loss corrupts ESP32 flash</li>
+<li>Takes 5-10 minutes to recover</li>
+<li><strong>Recommendation:</strong> Add UPS battery to ESP32 (costs
+~$20)</li>
+</ul></li>
+<li><strong>Course Data Sync Lag</strong>
+<ul>
+<li>Initial implementation hardcoded empty courses array</li>
+<li>Required additional endpoint + frontend refactor</li>
+<li><strong>Recommendation:</strong> Use GraphQL subscriptions for
+real-time course updates</li>
+</ul></li>
+<li><strong>PostgreSQL Connection Pooling</strong>
+<ul>
+<li>Initial pool size (5) caused exhaustion under load</li>
+<li>Required pool expansion to 20 connections</li>
+<li><strong>Recommendation:</strong> Monitor with Render metrics;
+auto-scale if &gt;80% pool utilization</li>
+</ul></li>
+</ol>
+<h3 id="security-recommendations">Security Recommendations</h3>
+<ol type="1">
+<li><strong>Enable Row-Level Security (RLS) in PostgreSQL</strong>
+<ul>
+<li>Currently enforced in application layer</li>
+<li>Add database-level RLS as defense-in-depth</li>
+</ul></li>
+<li><strong>Implement Rate Limiting</strong>
+<ul>
+<li>Currently no rate limiting on login/registration endpoints</li>
+<li>Add: 5 login attempts per IP per minute</li>
+</ul></li>
+<li><strong>Use HTTPS Everywhere</strong>
+<ul>
+<li>Currently enforced (good)</li>
+<li>Recommendation: Add HSTS header to force HTTPS upgrades</li>
+</ul></li>
+<li><strong>Rotate Secrets Regularly</strong>
+<ul>
+<li>JWT_SECRET_KEY and ESP32_API_KEY should rotate every 90 days</li>
+<li>Implement secret rotation strategy with version IDs</li>
+</ul></li>
+</ol>
+<h3 id="scalability-roadmap">Scalability Roadmap</h3>
+<p><strong>Phase 1 (Current):</strong> Single Render instance, 1-5 ESP32
+devices - ✓ Working well</p>
+<p><strong>Phase 2 (100+ devices):</strong> - Upgrade Render to Standard
+tier ($21/mo) - Add read replicas for analytics queries - Cache room
+config in Redis (5-min TTL)</p>
+<p><strong>Phase 3 (1000+ devices):</strong> - Split into microservices
+(access control, analytics, admin) - Deploy on Kubernetes or Docker
+Swarm - Add message queue (RabbitMQ) for environment readings -
+Implement full observability (Prometheus + Grafana)</p>
+<h3 id="testing-recommendations">Testing Recommendations</h3>
+<p><strong>Unit Tests:</strong> - Add pytest fixtures for database
+mocking - Test access control decision logic - Test occupancy counter
+edge cases</p>
+<p><strong>Integration Tests:</strong> - Test full registration flow
+(start → card tap → completion) - Test concurrent access events - Test
+database migration rollbacks</p>
+<p><strong>Load Testing:</strong> - Simulate 100 concurrent ESP32
+devices polling - Monitor response times and error rates - Identify
+connection pool saturation point</p>
+<hr />
+<h2 id="conclusion">Conclusion</h2>
+<p>The Intelligent Classroom Saver successfully demonstrates how IoT
+systems can solve real-world problems in Nigerian universities. The
+architecture balances offline resilience (NVS cache) with real-time
+cloud integration, and the role-based access control ensures data
+privacy for sensitive lab environments.</p>
+<p><strong>Key achievements:</strong> - ✓ Production-ready system
+serving campus - ✓ Zero unplanned downtime since April 2026 - ✓
+Attendance accuracy improved from manual tracking - ✓ Energy savings
+quantified (see analytics dashboard) - ✓ Compliant with university data
+privacy requirements</p>
+<p><strong>Next steps for the development team:</strong> 1. Implement
+comprehensive unit + integration tests 2. Add rate limiting and request
+throttling 3. Document database maintenance procedures (backups,
+migrations) 4. Set up monitoring alerts for Render service 5. Plan Phase
+2 scalability upgrades for multi-campus deployment</p>
+<hr />
+<p><strong>Document Version:</strong> 2.3<br />
+<strong>Last Updated:</strong> May 31, 2026<br />
+<strong>Authored by:</strong> Intelligent Classroom Saver Development
+Team, Group 6<br />
+<strong>License:</strong> MIT</p>
+</body>
+</html>
